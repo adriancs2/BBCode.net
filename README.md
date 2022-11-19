@@ -30,6 +30,25 @@ string fields = "{d1};{text}";
 rules.Add(new BBCodeRules(bbcode_syntax, html_syntax, fields));
 string output = BBCode.ConvertToHtml(input, rules);
 ```
+## The Order of Same BBCode
+
+If you have 2 same BBCode rules, but different parameters, for example:
+```
+[font={d1},{d2}]{text}[/font]
+[font={d1}]{text}[/font]
+```
+The more complex rule must be added first, then follow by less complex rule.
+
+For example, this is correct order:
+```
+[font={d1},{d2}]{text}[/font]
+[font={d1}]{text}[/font]
+```
+and this is wrong order:
+```
+[font={d1}]{text}[/font]
+[font={d1},{d2}]{text}[/font]
+```
 
 ## Default Built-in BBCode Rules:
 
