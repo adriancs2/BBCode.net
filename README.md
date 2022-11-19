@@ -23,6 +23,25 @@ Convert the BBCode text into html with basic built-in rules:
 ```
 string output = BBCode.ConvertToHtml(input);
 ```
+The output:
+```
+<span style='color: red;'><span style='font-size: 20pt;'>
+A Video Tutorial About Freezing HTML Table Headers
+</span></span><br />
+<span style='font-family: brush script mt; font-size: 30pt;'>
+Changing the font</span><br />
+<strong>Bolding the text</strong><br />
+<i>Italic the text</i><br />
+<a href='https://mywebsite.com'>https://mywebsite.com</a><br />
+<a href='https://mywebsite.com'>Visit My Website</a><br />
+<img src='https://mywebsite.com/logo.png' /><br />
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/_dpSEjaKqSE"
+title="YouTube video player" frameborder="0"
+allow="accelerometer; autoplay; clipboard-write;
+encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+```
 Design And Add Your Own BBCode:
 ```
 List<BBCodeRules> rules = BBCode.BasicRules;
