@@ -30,36 +30,79 @@ namespace BBCode
 {
     public class BBCode
     {
+        static List<BBCodeRules> _rules = null;
         static string _tempValueStr = "^````````^";
         static string _regexValue = ".+?";
 
-        public static string ConvertToHtml(string input, string inputSyntax, string htmlSyntax, string fields)
+        public static List<BBCodeRules> BasicRules
         {
-            return ConvertToHtml(input, inputSyntax, htmlSyntax, fields, false);
+            get
+            {
+                if (_rules == null)
+                {
+                    _rules = new List<BBCodeRules>();
+                    _rules.Add(new BBCodeRules("[b]{text}[/b]","<strong>{text}</strong>","{text}"));
+                    _rules.Add(new BBCodeRules("[u]{text}[/u]", "<u>{text}</u>", "{text}"));
+                    _rules.Add(new BBCodeRules("[i]{text}[/i]", "<i>{text}</i>", "{text}"));
+                    _rules.Add(new BBCodeRules("[color={d1}]{text}[/color]", "<span style='color: {d1};'>{text}</span>", "{d1};{text}"));
+                    _rules.Add(new BBCodeRules("[size={d1}]{text}[/size]", "<span style='font-size: {d1}pt;'>{text}</span>", "{d1};{text}"));
+                    _rules.Add(new BBCodeRules("[font={d1},{d2}]{text}[/font]", "<span style='font-family: {d1}; font-size: {d2}pt;'>{text}</span>", "{d1};{d2};{text}"));
+                    _rules.Add(new BBCodeRules("[font={d1}]{text}[/font]", "<span style='font-family: {d1};'>{text}</span>", "{d1};{text}"));
+                    _rules.Add(new BBCodeRules("[code]{text}[/code]", "<pre>{text}</pre>", "{text}"));
+                    _rules.Add(new BBCodeRules("[url]{text}[/url]", "<a href='{text}'>{text}</a>", "{text}"));
+                    _rules.Add(new BBCodeRules("[url={d1}]{text}[/url]", "<a href='{d1}'>{text}</a>", "{d1};{text}"));
+                    _rules.Add(new BBCodeRules("[img]{text}[/img]", "<img src='{text}' />", "{text}"));
+                    _rules.Add(new BBCodeRules("[img,{width},{height}]{text}[/img]", "<img style='width: {width}px; height: {height};' src='{text}' />", "{width};{height};{text}"));
+                    _rules.Add(new BBCodeRules("[youtube,{width},{height}]{videocode}[/youtube]", "<iframe width=\"{width}\" height=\"{height}\" src=\"https://www.youtube.com/embed/{videocode}\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>", "{videocode};{width};{height}"));
+                    _rules.Add(new BBCodeRules("[youtube]{videocode}[/youtube]", "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/{videocode}\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>", "{videocode}"));
+                }
+                return _rules;
+            }
+            set
+            {
+                _rules = value;
+            }
         }
 
-        public static string ConvertToHtml(string input, string inputSyntax, string htmlSyntax, string fields, bool allowHtmlScriptTagsAsValue)
+        public static string ConvertToHtml(string input)
         {
-            string[] _fields = fields.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < _fields.Length; i++)
-            {
-                _fields[i] = _fields[i].Trim().ToLower();
-            }
+            return ConvertToHtml(input, BasicRules);
+        }
 
-            string tempInputSyntax = inputSyntax;
-            foreach (string field in _fields)
-            {
-                tempInputSyntax = tempInputSyntax.Replace(field, _tempValueStr);
-            }
-            tempInputSyntax = EsceapeForRegex(tempInputSyntax);
-            tempInputSyntax = tempInputSyntax.Replace(_tempValueStr, _regexValue);
-            MatchCollection mc = Regex.Matches(input, tempInputSyntax, RegexOptions.IgnoreCase);
+        public static string ConvertToHtml(string input, List<BBCodeRules> rules)
+        {
+            return ConvertToHtml(input, rules, false);
+        }
 
-            foreach (Match m in mc)
+        public static string ConvertToHtml(string input, List<BBCodeRules> rules, bool allowHtmlScriptTagsAsValue)
+        {
+            foreach (var r in rules)
             {
-                string customInsertPart = m.Value;
-                string html = BuildHtml(customInsertPart, inputSyntax, htmlSyntax, _fields, allowHtmlScriptTagsAsValue);
-                input = input.Replace(customInsertPart, html);
+                string inputSyntax = r.BBCodeSyntax;
+                string htmlSyntax = r.HtmlSyntax;
+                string fields = r.Fields;
+
+                string[] _fields = fields.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < _fields.Length; i++)
+                {
+                    _fields[i] = _fields[i].Trim().ToLower();
+                }
+
+                string tempInputSyntax = inputSyntax;
+                foreach (string field in _fields)
+                {
+                    tempInputSyntax = tempInputSyntax.Replace(field, _tempValueStr);
+                }
+                tempInputSyntax = EsceapeForRegex(tempInputSyntax);
+                tempInputSyntax = tempInputSyntax.Replace(_tempValueStr, _regexValue);
+                MatchCollection mc = Regex.Matches(input, tempInputSyntax, RegexOptions.IgnoreCase);
+
+                foreach (Match m in mc)
+                {
+                    string customInsertPart = m.Value;
+                    string html = BuildHtml(customInsertPart, inputSyntax, htmlSyntax, _fields, allowHtmlScriptTagsAsValue);
+                    input = input.Replace(customInsertPart, html);
+                }
             }
 
             input = input.Replace("\r\n", "<br />");
@@ -189,7 +232,7 @@ namespace BBCode
             foreach (KeyValuePair<int, string> kv in _idxFields)
             {
                 // Replace the field in html with value
-                htmlSyntax = htmlSyntax.Replace(kv.Value, _idxValues[kv.Key].Replace("<", "&lt;"));
+                htmlSyntax = htmlSyntax.Replace(kv.Value, _idxValues[kv.Key].Replace("<", "&lt;").Replace("\"", "&#34;").Replace("'", "&#39;"));
             }
             #endregion
 
@@ -221,6 +264,7 @@ namespace BBCode
             string[] sa = allowedTags.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             html = html.Replace("<", "&lt;");
+
             foreach (string s in sa)
             {
                 html = Regex.Replace(html, "&lt;" + s, "<" + s, RegexOptions.IgnoreCase);

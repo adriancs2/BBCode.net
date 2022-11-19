@@ -28,12 +28,12 @@
         }
 
             .maintb td {
-                width: 50%;
                 vertical-align: top;
             }
 
                 .maintb td:first-child {
                     border-right: 1px solid #bdbdbd;
+                    width: 600px;
                 }
 
                 .maintb td:last-child {
@@ -44,9 +44,11 @@
             font-family: "Cascadia Mono", Consolas, Courier New;
             font-size: 10.5pt;
             color: #525252;
-            width: 96%;
+            width: 95%;
             padding: 2px 5px;
             margin-bottom: 5px;
+            background: #fff9d3;
+            border: 2px solid #9b9b9b;
         }
 
         .code {
@@ -57,8 +59,13 @@
         }
 
         textarea {
-            height: 100px;
+            height: 210px;
             line-height: 150%;
+        }
+
+        .lable {
+            display: inline-block;
+            width: 120px;
         }
     </style>
 </head>
@@ -73,31 +80,87 @@
         <table class="maintb">
             <tr>
                 <td>Enter Text Here with BBCode and Press the Button: [<b>Convert to Html</b>]<br />
-                    <asp:TextBox ID="txtInput" TextMode="MultiLine" runat="server" ValidateRequestMode="Disabled"></asp:TextBox>
+                    <asp:TextBox ID="txtInput" TextMode="MultiLine" runat="server" ValidateRequestMode="Disabled" spellcheck="false"></asp:TextBox>
 
                     <asp:Button ID="btSubmitAllowTag" runat="server" Text="Covert to Html (White List Tags)" OnClick="btSubmitAllowTag_Click" />
                     Allowed Html Tags:<br />
 
-                    <asp:TextBox ID="txtTagAllow" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="txtTagAllow" runat="server" spellcheck="false"></asp:TextBox>
 
                     <asp:Button ID="btSubmitBlockTag" runat="server" Text="Covert to Html (Black List Tags)" OnClick="btSubmitBlockTag_Click" />
                     Blocked Html Tags:<br />
 
-                    <asp:TextBox ID="txtTagBlock" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="txtTagBlock" runat="server" spellcheck="false"></asp:TextBox>
 
                     <br />
                     <br />
 
-                    <h2>Demo of Defining BBCode Syntax (Design Your Own BBCode):</h2>
+                    <h2>Design Your Own BBCode</h2>
 
-                    BBCode Syntax:<br />
-                    <asp:TextBox ID="txtInputSyntax" runat="server"></asp:TextBox>
+                    <span class="lable">BBCode Syntax</span>:
+                    <asp:TextBox ID="txtInputSyntax" runat="server" spellcheck="false" Width="300px"></asp:TextBox><br />
 
-                    Convert to HTML:<br />
-                    <asp:TextBox ID="txtHtmlSyntax" runat="server" TextMode="MultiLine" ValidateRequestMode="Disabled"></asp:TextBox>
+                    <span class="lable">HTML Syntax</span>:
+                    <asp:TextBox ID="txtHtmlSyntax" runat="server" ValidateRequestMode="Disabled" spellcheck="false" Width="300px"></asp:TextBox><br />
 
-                    Fields:<br />
-                    <asp:TextBox ID="txtFields" runat="server"></asp:TextBox>
+                    <span class="lable">Fields</span>:
+                    <asp:TextBox ID="txtFields" runat="server" spellcheck="false" Width="300px"></asp:TextBox>
+
+                    <br />
+                    <br />
+
+                    <h2>Example of BBCode Designing</h2>
+
+                    <pre class="code">
+BBCode Syntax  =  [color={colorcode}]{text}[/color]
+HTML Syntax    =  &lt;span style=&quot;color: {colorcode};&quot;&gt;{text}&lt;/span&gt;
+Fields         =  {colorcode};{text}
+                    </pre>
+
+                    <h2>Default Built-In BBCode Rules</h2>
+                    <pre class="code">[b]{text}[/b]
+Example: [b]your text here[/b]
+
+[u]{text}[/u]
+Example: [u]your text here[/u]
+
+[i]{text}[/i]
+Example: [i]your text here[/i]
+
+[color={d1}]{text}[/color]
+Example: [color=red]your text here[/color]
+Example: [color=#525252]your text here[/color]
+
+[size={d1}]{text}[/size]
+Example: [size=20]your text here[/size]
+
+[font={d1},{d2}]{text}[/font]
+Example: [font=brush script mt,30]Changing the font[/font]
+
+[font={d1}]{text}[/font]
+Example: [font=brush script mt]Changing the font[/font]
+
+[code]{text}[/code]
+Example: [code]your text here[/code]
+
+[url]{text}[/url]
+Example: [url]https://adriancs.com[/url]
+
+[url={d1}]{text}[/url]
+Example: [url=https://adriancs.com]Visit the Authur's Website[/url]
+
+[img]{text}[/img]
+Example: [img]https://yourwebsite.com/someimg.jpg[/img]
+
+[img,{width},{height}]{text}[/img]
+Example: [img,300,200]https://yourwebsite.com/someimg.jpg[/img]
+
+[youtube,{width},{height}]{videocode}[/youtube]
+Example: [youtube,560,315]_dpSEjaKqSE[/youtube]
+
+[youtube]{videocode}[/youtube]
+Example: [youtube]_dpSEjaKqSE[/youtube]
+                    </pre>
                 </td>
                 <td>
                     <h2>Generated HTML:</h2>

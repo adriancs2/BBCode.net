@@ -7,7 +7,7 @@
     <ProjectGuid>{DED0E3C5-DD1C-4778-AE5A-5902670BD6F9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BBCode.NET</RootNamespace>
+    <RootNamespace>BBCode</RootNamespace>
     <AssemblyName>BBCode.NET</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BBCode.cs" />
+    <Compile Include="BBCodeRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
