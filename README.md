@@ -50,6 +50,22 @@ and this is wrong order:
 [font={d1},{d2}]{text}[/font]  // this must come first
 ```
 
+## White List and Black List HTML Tag Input
+
+Here's the code for allowing (white list) html tags to be input.
+
+```
+string whiteListTags = "p;br;hr;strong;b;u;em;h1;h2;h3;h4;h5;h6;span;body;style;table;tr;td;img;a";
+output = BBCode.AllowTags(input, whiteListTags);
+output = BBCode.ConvertToHtml(input);
+```
+To block (black list) html tags:
+```
+string blackListTags = "iframe;script;form;object;";
+output = BBCode.BlockTags(input, blackListTags);
+output = BBCode.ConvertToHtml(input);
+```
+
 ## Default Built-in BBCode Rules:
 
 ```
