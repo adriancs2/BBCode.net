@@ -41,13 +41,13 @@ The more complex rule must be added first, then follow by less complex rule.
 
 For example, this is correct order:
 ```
-[font={d1},{d2}]{text}[/font]
+[font={d1},{d2}]{text}[/font]  // this must come first
 [font={d1}]{text}[/font]
 ```
 and this is wrong order:
 ```
 [font={d1}]{text}[/font]
-[font={d1},{d2}]{text}[/font]
+[font={d1},{d2}]{text}[/font]  // this must come first
 ```
 
 ## Default Built-in BBCode Rules:
