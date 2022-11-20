@@ -44,11 +44,18 @@ encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 ```
 Design And Add Your Own BBCode:
 ```
+// Obtain the basic built-in rules
 List<BBCodeRules> rules = BBCode.BasicRules;
+
+// Designing new rule
 string bbcode_syntax = "[size={d1}]{text}[/size]";
 string html_syntax = "<span style='font-size: {d1}pt;'>{text}</span>";
 string fields = "{d1};{text}";
+
+// Add the new rule into the list
 rules.Add(new BBCodeRules(bbcode_syntax, html_syntax, fields));
+
+// Covert the BBCode with new set of rules
 string output = BBCode.ConvertToHtml(input, rules);
 ```
 ## The Order of Same BBCode
