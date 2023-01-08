@@ -4,6 +4,12 @@ Live Demo: [http://bbcode.adriancs.com/](http://bbcode.adriancs.com/)
 
 ![](https://raw.githubusercontent.com/adriancs2/BBCode.net/master/wiki/02.png)
 
+## Important
+
+This project is in Alpha stage and is not ready and it's not meant for real world usage. This repository serves as a public study and research only.
+
+Use the code with caution.
+
 ## How to Use The Code
 
 Take the following as sample input data:
